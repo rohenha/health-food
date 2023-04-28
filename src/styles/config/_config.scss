@@ -1,3 +1,4 @@
+@use 'sass:math';
 /* stylelint-disable length-zero-no-unit */
 
 //  G L O B A L
@@ -7,12 +8,13 @@ $assets-path: "/" !default;
 //  V A R I A B L E S
 //  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 $font-size-base: 16;
-$font-size-percent: #{100 / $font-size-base * 10%};
+$font-size-percent: #{math.div(100, $font-size-base) * 10%};
 
 // F O N T S
 //  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$font-regular: 'Arial', sans-serif;
-$font-title: 'Arial', sans-serif;
+$font-regular: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, helvetica, arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-title: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, helvetica, arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-icons: 'icon-worksregular', sans-serif;
 
 // S P A C E S
 //  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -17,6 +17,11 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "globals": {
+    "document": true,
+    "window": true,
+    "process": true
+},
   "plugins": ["react", "react-hooks", "react-refresh", "prettier"],
   "rules": {
     "react-refresh/only-export-components": "warn",

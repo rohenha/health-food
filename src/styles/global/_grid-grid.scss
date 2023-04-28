@@ -1,6 +1,8 @@
+@use 'sass:math';
+
 /* stylelint-disable function-comma-space-after */
 @if $debgrid {
-  $colw: #{1 / $total-columns * 100%};
+  $colw: #{math.div(1, $total-columns) * 100%};
 
   body {
     position: relative;

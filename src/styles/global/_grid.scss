@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 //
 //  G R I D
 //
@@ -58,7 +60,7 @@
 
     // grid classes
     @for $i from 0 through $total-columns {
-      $column-width-percent: 100% * ($i * ($column-width + $column-gutter)) / $row-width;
+      $column-width-percent: math.div(100% * ($i * ($column-width + $column-gutter)), $row-width);
       @include selector('.column-#{$i}', $value) {
         flex: 0 0 $column-width-percent;
         width: $column-width-percent;

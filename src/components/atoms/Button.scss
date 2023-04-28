@@ -1,0 +1,23 @@
+.a-button {
+  padding: 1.5rem 2rem;
+  border-radius: 1.5rem;
+
+  &.-primary {
+    background-color: clr(primary);
+    color: clr(fourth);
+  }
+
+  &.-secondary {
+    background-color: clr(secondary);
+    color: clr(fourth);
+  }
+
+  &.-third {
+    background-color: clr(third);
+    color: clr(fourth);
+  }
+
+  &.-xl {
+    width: 100%;
+  }
+}

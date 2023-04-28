@@ -1,0 +1,13 @@
+.t-new {
+  padding-top: 6rem;
+  text-align: center;
+
+  h1 {
+    margin-bottom: $vr;
+  }
+
+  form {
+    display: grid;
+    gap: 3rem;
+  }
+}

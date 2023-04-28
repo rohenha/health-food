@@ -1,29 +1,25 @@
 /* ──────────────────────────────────────────────────────────
 ►►► Vite Plugins
 ────────────────────────────────────────────────────────── */
-import brotli from "rollup-plugin-brotli"
-import { visualizer } from "rollup-plugin-visualizer"
+import brotli from 'rollup-plugin-brotli'
+import { visualizer } from 'rollup-plugin-visualizer'
 import react from '@vitejs/plugin-react'
 
 /* ─────────────────────────────────────────────────────── */
 /* ─────────────────────────────────────────────────────── */
 
 export default ({ isProd, isAnalyze }) => {
-  const plugins = [
-    react()
-  ]
+  const plugins = [react()]
 
-  const pProd = [
-    brotli()
-  ]
+  const pProd = [brotli()]
 
   const pAnalyze = [
     visualizer({
       gzipSize: true,
       brotliSize: true,
       open: false,
-      template: 'treemap'
-     })
+      template: 'treemap',
+    }),
   ]
 
   if (isAnalyze) {

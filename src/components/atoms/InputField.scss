@@ -1,0 +1,21 @@
+.a-inputField {
+  label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 1.5rem;
+    border: .2rem solid clr('gray');
+    border-radius: .5rem;
+
+    // appearance: none;
+
+    &:focus {
+      border-color: clr(primary);
+      outline: none;
+    }
+  }
+}

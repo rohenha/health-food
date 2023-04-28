@@ -34,12 +34,12 @@
 //   font-display: swap;
 // }
 
-// @include font-face(
-//   "Radio Grotesk",
-//   "fonts/RadioGrotesk-Regular",
-//   ("woff2", "woff", "ttf")
-// ) {
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
+@include font-face(
+  "icon-worksregular",
+  "fonts/icon-works-webfont",
+  ("woff")
+) {
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

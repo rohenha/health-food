@@ -6,7 +6,7 @@ import Default from '@components/layouts/Default'
 import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
 
-function App() {
+export default function Home() {
   const [count, setCount] = useState(0)
 
   return (
@@ -35,5 +35,3 @@ function App() {
     </Default>
   )
 }
-
-export default App
