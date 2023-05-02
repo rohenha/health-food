@@ -1,21 +1,49 @@
-import { useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import Default from '@components/layouts/Default'
-import Button from '@components/atoms/Button'
 import InputField from '@components/atoms/InputField'
+import Button from '@components/atoms/Button'
 
-import { createRecipe } from '@libs/recipes'
+import { findOneRecipe, removeRecipe, updateRecipe } from '@libs/recipes'
 import InputReducer from '@hooks/InputReducer'
 import useToasts from '@hooks/Toasts'
 
-import './New.scss'
-
-export default function New() {
+export default function EditRecipe() {
+  const { id } = useParams()
+  const navigate = useNavigate()
   const { pushToast } = useToasts()
+  const [recipe, setRecipe] = useState({ id: 0, attributes: {} })
   const [form, formDispatch] = InputReducer({
     name: '',
     type: '',
   })
+
+  const getRecipe = useCallback(async () => {
+    const recipeData = await findOneRecipe(id)
+    setRecipe(recipeData)
+    formDispatch({
+      state: {
+        name: recipeData.attributes.title,
+        type: recipeData.attributes.nature,
+      },
+      type: 'set',
+    })
+  }, [])
+
+  const onRemoveRecipe = useCallback(async () => {
+    await removeRecipe(id)
+    pushToast({
+      title: '',
+      content: 'La recette a bien été supprimée',
+      state: 'success',
+    })
+    return navigate('/recipes')
+  }, [])
+
+  useEffect(() => {
+    getRecipe()
+  }, [])
 
   const handleChange = useCallback((event) => {
     formDispatch({ target: event.target, type: 'update' })
@@ -23,18 +51,17 @@ export default function New() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const data = await createRecipe({
+    const data = await updateRecipe(recipe.id, {
       title: form.name,
       nature: form.type,
       preparation_duration: 0,
     })
 
     if (data.data.id) {
-      console.log(data)
-      formDispatch({ type: 'reset' })
+      setRecipe(data.data)
       pushToast({
         title: '',
-        content: 'La recette a bien été créée',
+        content: 'La recette a bien été mise à jour',
         state: 'success',
       })
     } else {
@@ -47,10 +74,10 @@ export default function New() {
   }
 
   return (
-    <Default className="t-new">
+    <Default>
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
-          <h1 className="-tupp -tbold">Nouvelle recette</h1>
+          <h1>Edit Recipe: {recipe.attributes.title}</h1>
           <form action="" onSubmit={handleSubmit}>
             <InputField
               label="Nom de la recette"
@@ -75,33 +102,12 @@ export default function New() {
                 { value: 'aperitif', content: 'Apéritif' },
               ]}
             />
-            {/* <InputField
-              label="Ingrédients"
-              type="checkbox"
-              name="ingredients"
-              value={form.ingredients}
-              onChange={handleChange}
-              options={[
-                { value: 'poireaux', content: 'Poireaux', name: 'poireaux' },
-                { value: 'bread', content: 'Pain', name: 'bread' },
-                { value: 'emmental', content: 'Emmental', name: 'emmental' },
-              ]}
-            /> */}
-            {/* <InputField
-              label="Type de cuisine"
-              type="radio"
-              name="cooking"
-              value={form.cooking}
-              onChange={handleChange}
-              options={[
-                { value: 'four', content: 'Four', name: 'four' },
-                { value: 'plaques', content: 'Plaques', name: 'plaques' },
-              ]}
-            /> */}
             <Button className=" -primary" type="submit">
-              Créer la recette
+              Mettre à jour la recette
             </Button>
           </form>
+          <Button url={`/recipes/${recipe.id}`}>Retour sur la recette</Button>
+          <Button onClick={onRemoveRecipe}>Supprimer la recette</Button>
         </div>
       </div>
     </Default>

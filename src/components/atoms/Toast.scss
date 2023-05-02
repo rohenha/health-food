@@ -1,0 +1,37 @@
+// @keyframes toggle-alert {
+//   0% {
+//     transform: translate(-50%, 0);
+//   }
+
+//   6% {
+//     transform: translate(-50%, 6rem);
+//   }
+
+//   94% {
+//     transform: translate(-50%, 6rem);
+//   }
+
+//   100% {
+//     transform: translate(-50%, 0);
+//   }
+// }
+
+.a-toast {
+  position: fixed;
+  bottom: 100%;
+  left: 50%;
+  z-index: 9999;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  color: clr('white');
+  transform: translate(-50%, 6rem);
+  animation: toggle-alert 5s ease-in-out;
+
+  &.-success {
+    background-color: clr(success);
+  }
+
+  &.-error {
+    background-color: clr(error);
+  }
+}

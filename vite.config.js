@@ -25,6 +25,8 @@ export default defineConfig({
       '@components/': `${folder}/components/`,
       '@routes/': `${folder}/routes/`,
       '@libs/': `${folder}/libs/`,
+      '@hooks/': `${folder}/hooks/`,
+      '@contexts/': `${folder}/contexts/`,
     },
   },
   css: {

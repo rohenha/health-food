@@ -1,46 +1,61 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 
 import Default from '@components/layouts/Default'
+import RecipesList from '@components/molecules/RecipesList'
+import RecipesSearch from '@components/molecules/RecipesSearch'
+import Pagination from '@components/organisms/Pagination'
+
+import { searchRecipes } from '@libs/recipes'
+import { debounce } from '@libs/utils'
+
+import './Recipes.scss'
 
 export default function Recipes() {
-  const page = 1
-  const [recipes, setRecipes] = useState([])
-  const getRecipes = async () => {
-    const response = await fetch(
-      `${import.meta.env.VITE_STRAPI_URL}/api/recettes`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_STRAPI_TOKEN}`,
-        },
-      }
-    )
+  const [page, setPage] = useState()
+  const [search, setSearch] = useState({
+    name: '',
+  })
+  const [recipes, setRecipes] = useState({
+    data: [],
+    pagination: { page: 1, pageCount: 1, pageSize: 10, total: 1 },
+  })
 
-    const data = await response.json()
-    setRecipes(data.data)
-  }
+  const updatePage = useCallback((index) => {
+    setPage(index)
+  }, [])
+
+  const debouncedChangeHandler = useMemo(() => {
+    return debounce((args) => {
+      setSearch(args)
+      setPage(1)
+    }, 300)
+  }, [])
 
   useEffect(() => {
+    const getRecipes = async () => {
+      const recipesData = await searchRecipes(search, page)
+      setRecipes({
+        data: recipesData.data,
+        pagination: recipesData.meta.pagination,
+      })
+    }
+
     getRecipes()
-  }, [page])
+  }, [page, search])
 
   return (
-    <Default>
+    <Default className="t-recipes">
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1 className="-tupp -tbold">Recettes</h1>
-          <ul>
-            {recipes.map((recipe) => (
-              <li key={`r${recipe.id}`}>
-                <Link to={`/recipes/${recipe.id}`}>
-                  {recipe.attributes.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <RecipesSearch onChange={debouncedChangeHandler} />
+          <p>Nombre de résultats : {recipes.pagination.total}</p>
+          <RecipesList recipes={recipes.data} />
+          <Pagination
+            page={recipes.pagination.page}
+            count={recipes.pagination.pageCount}
+            onPageChange={updatePage}
+          />
         </div>
       </div>
     </Default>

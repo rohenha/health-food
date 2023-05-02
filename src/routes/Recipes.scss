@@ -1,0 +1,12 @@
+.t-recipes {
+  padding-top: 6rem;
+
+  h1 {
+    margin-bottom: 6rem;
+  }
+
+  &__list {
+    display: grid;
+    gap: 3rem;
+  }
+}

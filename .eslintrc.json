@@ -41,7 +41,9 @@
         ["@styles", "./src/styles"],
         ["@components", "./src/components"],
         ["@routes", "./src/routes"],
-        ["@libs", "./src/libs"]
+        ["@libs", "./src/libs"],
+        ["@hooks", "./src/hooks"],
+        ["@contexts", "./src/contexts"]
       ]
     }
   }

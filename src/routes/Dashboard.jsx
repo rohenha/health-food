@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 
-import Default from '@components/layouts/Default'
+import Protected from '@components/layouts/Protected'
 
 export default function Dashboard() {
   return (
-    <Default>
+    <Protected>
       <h1>Dashboard</h1>
       <Link to={`/`}>Home</Link>
-    </Default>
+    </Protected>
   )
 }

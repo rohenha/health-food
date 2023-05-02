@@ -3,15 +3,10 @@ import { useMemo } from 'react'
 
 import './Button.scss'
 
-export default function Button({
-  children,
-  url,
-  onClick,
-  className,
-  ...props
-}) {
+export default function Button({ children, url, className, ...props }) {
   const btnClass = useMemo(
-    () => `a-button a-buttonText${className}`,
+    () =>
+      className ? `a-button a-buttonText${className}` : `a-button a-buttonText`,
     [className]
   )
   if (url) {
@@ -22,7 +17,7 @@ export default function Button({
     )
   } else {
     return (
-      <button className={btnClass} onClick={onClick} {...props}>
+      <button className={btnClass} {...props}>
         {children}
       </button>
     )

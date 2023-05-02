@@ -1,11 +1,13 @@
+import { Outlet } from 'react-router-dom'
+
 import Navbar from '@components/organisms/navbar'
 
 import { nav } from '@libs/variables'
 
-export default function Layout({ children, className }) {
+export default function Layout() {
   return (
-    <div className={className}>
-      {children}
+    <div>
+      <Outlet />
       <Navbar nav={nav} />
     </div>
   )
