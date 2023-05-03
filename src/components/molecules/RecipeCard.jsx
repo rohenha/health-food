@@ -6,7 +6,7 @@ import './RecipeCard.scss'
 const RecipeCard = function ({ recipe }) {
   return (
     <article className="m-recipeCard">
-      <Link to={`/recipes/${recipe.id}`} className="a-h4">
+      <Link to={`/app/recipes/${recipe.id}`} className="a-h4">
         {recipe.attributes.title}
       </Link>
     </article>

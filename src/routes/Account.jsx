@@ -1,9 +1,7 @@
-import Default from '@components/layouts/Default'
-
 export default function Home() {
   return (
-    <Default>
+    <div className="t-account">
       <h1>Mon compte</h1>
-    </Default>
+    </div>
   )
 }

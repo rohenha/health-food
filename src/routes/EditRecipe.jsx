@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-import Default from '@components/layouts/Default'
 import InputField from '@components/atoms/InputField'
 import Button from '@components/atoms/Button'
 
@@ -74,7 +73,7 @@ export default function EditRecipe() {
   }
 
   return (
-    <Default>
+    <div className="t-recipeEdit">
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1>Edit Recipe: {recipe.attributes.title}</h1>
@@ -106,10 +105,12 @@ export default function EditRecipe() {
               Mettre à jour la recette
             </Button>
           </form>
-          <Button url={`/recipes/${recipe.id}`}>Retour sur la recette</Button>
+          <Button url={`/app/recipes/${recipe.id}`}>
+            Retour sur la recette
+          </Button>
           <Button onClick={onRemoveRecipe}>Supprimer la recette</Button>
         </div>
       </div>
-    </Default>
+    </div>
   )
 }

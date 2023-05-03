@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-import Default from '@components/layouts/Default'
 import Button from '@components/atoms/Button'
 
 import { findOneRecipe, removeRecipe } from '@libs/recipes'
@@ -33,7 +32,7 @@ export default function Recipe() {
   }, [])
 
   return (
-    <Default>
+    <div className="t-recipe">
       <h1>Recipe: {recipe.attributes.title}</h1>
       <ul>
         <li>Titre :{recipe.attributes.title}</li>
@@ -42,8 +41,8 @@ export default function Recipe() {
           Temps de préparation :{recipe.attributes.preparation_duration} min
         </li>
       </ul>
-      <Button url={`/recipes/${recipe.id}/edit`}>Editer la recette</Button>
+      <Button url={`/app/recipes/${recipe.id}/edit`}>Editer la recette</Button>
       <Button onClick={onRemoveRecipe}>Supprimer la recette</Button>
-    </Default>
+    </div>
   )
 }

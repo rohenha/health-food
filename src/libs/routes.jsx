@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import Account from '@routes/Account.jsx'
 import SignIn from '@routes/SignIn.jsx'
-import Root from '@components/layouts/Root.jsx'
+import Protected from '@components/layouts/Protected.jsx'
 import Dashboard from '@routes/Dashboard.jsx'
 import Recipes from '@routes/Recipes.jsx'
 import New from '@routes/New.jsx'
@@ -14,25 +14,17 @@ import Error from '@routes/Error.jsx'
 
 const routes = createBrowserRouter([
   {
-    path: '/',
-    element: <Root />,
+    path: '/app',
+    element: <Protected />,
     errorElement: <Error />,
     children: [
       {
         path: '',
-        element: <SignIn />,
+        element: <Dashboard />,
       },
       {
         path: 'account',
         element: <Account />,
-      },
-      {
-        path: 'sign-up',
-        element: <SignUp />,
-      },
-      {
-        path: 'dashboard',
-        element: <Dashboard />,
       },
       {
         path: 'recipes',
@@ -49,12 +41,21 @@ const routes = createBrowserRouter([
       {
         path: 'new',
         element: <New />,
+        className: 't-new',
       },
       {
         path: 'planning',
         element: <Planning />,
       },
     ],
+  },
+  {
+    path: 'sign-in',
+    element: <SignIn />,
+  },
+  {
+    path: 'sign-up',
+    element: <SignUp />,
   },
   // {
   //   path: '*',

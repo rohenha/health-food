@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 
-import Default from '@components/layouts/Default'
 import Button from '@components/atoms/Button'
 import InputField from '@components/atoms/InputField'
 
@@ -47,7 +46,7 @@ export default function New() {
   }
 
   return (
-    <Default className="t-new">
+    <div className="t-new">
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1 className="-tupp -tbold">Nouvelle recette</h1>
@@ -104,6 +103,6 @@ export default function New() {
           </form>
         </div>
       </div>
-    </Default>
+    </div>
   )
 }

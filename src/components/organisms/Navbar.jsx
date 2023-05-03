@@ -14,6 +14,7 @@ export default function Navbar({ nav }) {
               className={({ isActive }) =>
                 isActive ? 'a-iconText -active' : 'a-iconText'
               }
+              end
             >
               {item.content}
             </NavLink>

@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 
-import Default from '@components/layouts/Default'
 import RecipesList from '@components/molecules/RecipesList'
 import RecipesSearch from '@components/molecules/RecipesSearch'
 import Pagination from '@components/organisms/Pagination'
@@ -44,7 +43,7 @@ export default function Recipes() {
   }, [page, search])
 
   return (
-    <Default className="t-recipes">
+    <div className="t-recipes">
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1 className="-tupp -tbold">Recettes</h1>
@@ -58,6 +57,6 @@ export default function Recipes() {
           />
         </div>
       </div>
-    </Default>
+    </div>
   )
 }

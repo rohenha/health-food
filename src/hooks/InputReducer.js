@@ -12,14 +12,11 @@ const setTextInput = (state, target) => {
 const updateInput = (state, action) => {
   const { target } = action
   switch (target.type) {
-    case 'text':
-      return setTextInput(state, target)
-
     case 'select-one':
       return setTextInput(state, target)
 
     default:
-      return state
+      return setTextInput(state, target)
   }
 }
 
