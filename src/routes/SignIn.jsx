@@ -1,11 +1,13 @@
 import { useCallback } from 'react'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 import Button from '@components/atoms/Button'
 import InputField from '@components/atoms/InputField'
-
 import InputReducer from '@hooks/InputReducer'
 
 export default function SignIn() {
+  const navigate = useNavigate()
   const [form, formDispatch] = InputReducer({
     identifier: '',
     password: '',
@@ -31,6 +33,15 @@ export default function SignIn() {
     )
     const loginResponseData = await login.json()
     console.log(loginResponseData)
+    if (form.remember_me) {
+      Cookies.set('token', loginResponseData.jwt, { expires: 30 })
+      Cookies.set('user', JSON.stringify(loginResponseData.user), {
+        expires: 30,
+      })
+    }
+    sessionStorage.setItem('token', loginResponseData.jwt)
+    sessionStorage.setItem('user', JSON.stringify(loginResponseData.user))
+    navigate('/app')
   }
 
   return (

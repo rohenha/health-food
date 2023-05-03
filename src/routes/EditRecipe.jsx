@@ -37,7 +37,7 @@ export default function EditRecipe() {
       content: 'La recette a bien été supprimée',
       state: 'success',
     })
-    return navigate('/recipes')
+    return navigate('/app/recipes')
   }, [])
 
   useEffect(() => {
