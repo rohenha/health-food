@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import Button from '@components/atoms/Button'
 
-export default function Pagination({ page, count, onPageChange }) {
+const Pagination = ({ pageCount, page, onPageChange }) => {
   return (
     <div className="o-pagination">
-      {Array.from(Array(count)).map((e, index) => (
+      {Array.from(Array(pageCount)).map((e, index) => (
         <Button
           key={`p${index}`}
           className={page === index + 1 ? ' -active' : ''}
@@ -15,4 +16,13 @@ export default function Pagination({ page, count, onPageChange }) {
     </div>
   )
 }
-// { page: 1, pageCount: 1, pageSize: 10, total: 0 }
+
+const areEqual = (prevProps, nextProps) => {
+  return (
+    prevProps.pageCount === nextProps.pageCount &&
+    prevProps.page === nextProps.page
+  )
+}
+
+const PaginationMemo = memo(Pagination, areEqual)
+export default PaginationMemo

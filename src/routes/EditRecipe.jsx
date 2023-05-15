@@ -1,34 +1,41 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 import InputField from '@components/atoms/InputField'
 import Button from '@components/atoms/Button'
 
 import { findOneRecipe, removeRecipe, updateRecipe } from '@libs/recipes'
-import InputReducer from '@hooks/InputReducer'
 import useToasts from '@hooks/Toasts'
+
+const schema = yup
+  .object({
+    name: yup.string().required('Un nom doit être choisit'),
+    type: yup.string().required('Vous devez sélectionner un type'),
+  })
+  .required()
 
 export default function EditRecipe() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { pushToast } = useToasts()
-  const [recipe, setRecipe] = useState({ id: 0, attributes: {} })
-  const [form, formDispatch] = InputReducer({
-    name: '',
-    type: '',
+  const { register, handleSubmit, formState, setValue } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
   })
+  const errors = useMemo(() => {
+    return formState.errors
+  }, [formState.errors])
+  const [recipe, setRecipe] = useState({ id: 0, attributes: {} })
 
   const getRecipe = useCallback(async () => {
     const recipeData = await findOneRecipe(id)
     setRecipe(recipeData)
-    formDispatch({
-      state: {
-        name: recipeData.attributes.title,
-        type: recipeData.attributes.nature,
-      },
-      type: 'set',
-    })
-  }, [])
+    setValue('name', recipeData.attributes.title)
+    setValue('type', recipeData.attributes.nature)
+  }, [setValue, setRecipe, id])
 
   const onRemoveRecipe = useCallback(async () => {
     await removeRecipe(id)
@@ -44,20 +51,16 @@ export default function EditRecipe() {
     getRecipe()
   }, [])
 
-  const handleChange = useCallback((event) => {
-    formDispatch({ target: event.target, type: 'update' })
-  }, [])
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const data = await updateRecipe(recipe.id, {
-      title: form.name,
-      nature: form.type,
+  const onEdit = async (data) => {
+    console.log(data)
+    const recipeData = await updateRecipe(recipe.id, {
+      title: data.name,
+      nature: data.type,
       preparation_duration: 0,
     })
 
-    if (data.data.id) {
-      setRecipe(data.data)
+    if (recipeData.data.id) {
+      setRecipe(recipeData.data)
       pushToast({
         title: '',
         content: 'La recette a bien été mise à jour',
@@ -77,23 +80,21 @@ export default function EditRecipe() {
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1>Edit Recipe: {recipe.attributes.title}</h1>
-          <form action="" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onEdit)}>
             <InputField
               label="Nom de la recette"
               type="text"
               name="name"
               placeholder="Gratin de pâtes"
-              value={form.name}
-              required={true}
-              onChange={handleChange}
+              register={register}
+              errors={errors.name}
             />
             <InputField
               label="Type de recette"
               type="select"
               name="type"
-              value={form.type}
-              onChange={handleChange}
-              required={true}
+              register={register}
+              errors={errors.type}
               options={[
                 { value: 'breakfast', content: 'Petit déjeuner' },
                 { value: 'starter', content: 'Entrée' },

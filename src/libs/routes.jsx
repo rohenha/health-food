@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+import Protected from '@components/layouts/Protected.jsx'
+import UnProtected from '@components/layouts/UnProtected.jsx'
+
 import Account from '@routes/Account.jsx'
 import SignIn from '@routes/SignIn.jsx'
-import Protected from '@components/layouts/Protected.jsx'
 import Dashboard from '@routes/Dashboard.jsx'
 import Recipes from '@routes/Recipes.jsx'
 import New from '@routes/New.jsx'
@@ -41,7 +43,6 @@ const routes = createBrowserRouter([
       {
         path: 'new',
         element: <New />,
-        className: 't-new',
       },
       {
         path: 'planning',
@@ -51,7 +52,13 @@ const routes = createBrowserRouter([
   },
   {
     path: 'sign-in',
-    element: <SignIn />,
+    element: <UnProtected />,
+    children: [
+      {
+        path: '',
+        element: <SignIn />,
+      },
+    ],
   },
   {
     path: 'sign-up',

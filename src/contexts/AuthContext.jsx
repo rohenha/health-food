@@ -1,33 +1,43 @@
-import { createContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { createContext, useState, useMemo } from 'react'
+import Cookies from 'js-cookie'
 
 export const AuthContext = createContext('')
 
 export function AuthContextProvider({ children }) {
-  const navigate = useNavigate()
-  const [token, setToken] = useState(null)
-
-  const fakeAuth = () =>
-    new Promise((resolve) => {
-      setTimeout(() => resolve('2342f2f1d131rf12'), 250)
-    })
-
-  const handleLogin = async () => {
-    const token = await fakeAuth()
-
-    setToken(token)
-    navigate('/dashboard')
+  console.log('render Auth Context')
+  const getAuth = () => {
+    const userCookie = Cookies.get('user')
+    const userSession = sessionStorage.getItem('user')
+    const userData = userCookie || userSession
+    if (userData === null) {
+      return null
+    }
+    return JSON.parse(userData)
   }
 
-  const handleLogout = () => {
-    setToken(null)
-  }
+  const data = getAuth()
+  const [user, setUser] = useState(data)
 
-  const value = {
-    token,
-    onLogin: handleLogin,
-    onLogout: handleLogout,
-  }
+  // const updateAuth = () => {
+  //   const newUser = getAuth()
+  //   setUser(newUser)
+  // }
+
+  const value = useMemo(() => {
+    const handleLogin = async (data) => {
+      await setUser(data)
+    }
+
+    const handleLogout = async () => {
+      await setUser(null)
+    }
+
+    return {
+      user,
+      onLogin: handleLogin,
+      onLogout: handleLogout,
+    }
+  }, [user])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

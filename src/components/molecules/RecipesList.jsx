@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import RecipeCard from '@components/molecules/RecipeCard'
 
-export default function RecipesList({ recipes }) {
+const RecipesList = ({ recipes }) => {
   return (
     <ul className="t-recipes__list">
       {recipes.map((recipe) => (
@@ -11,3 +13,10 @@ export default function RecipesList({ recipes }) {
     </ul>
   )
 }
+
+const areEqual = (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.recipes) === JSON.stringify(nextProps.recipes)
+}
+
+const RecipesListMemo = memo(RecipesList, areEqual)
+export default RecipesListMemo

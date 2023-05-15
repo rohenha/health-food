@@ -1,24 +1,22 @@
 import { useContext } from 'react'
-import { useNavigate, Navigate, Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 
 import Navbar from '@components/organisms/navbar'
 
-import { ToastContextProvider } from '@contexts/ToastContext'
 import { AuthContext } from '@contexts/AuthContext'
 import { nav } from '@libs/variables'
 
-export default function ProtectedRoute() {
-  const { token } = useContext(AuthContext)
+export default function Protected() {
+  const { user } = useContext(AuthContext)
 
-  // if (!token) {
-  //   return <Navigate to="/" replace />
-  // }
-  console.log('init protected')
+  if (!user) {
+    return <Navigate to="/sign-in" replace />
+  }
 
   return (
-    <ToastContextProvider>
+    <>
       <Outlet />
       <Navbar nav={nav} />
-    </ToastContextProvider>
+    </>
   )
 }

@@ -1,72 +1,86 @@
-import { useCallback } from 'react'
-import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 import Button from '@components/atoms/Button'
 import InputField from '@components/atoms/InputField'
-import InputReducer from '@hooks/InputReducer'
+
+import useAuth from '@hooks/Auth'
+
+const schema = yup
+  .object({
+    identifier: yup.string().required("Vous devez remplir l'identifiant"),
+    password: yup.string().required('Veuillez entrer un mot de passe'),
+  })
+  .required()
 
 export default function SignIn() {
-  const navigate = useNavigate()
-  const [form, formDispatch] = InputReducer({
-    identifier: '',
-    password: '',
+  const { onLogin } = useAuth()
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
   })
 
-  const handleChange = useCallback((event) => {
-    formDispatch({ target: event.target, type: 'update' })
+  // const { errors } = formState
+  // const getErrors = useCallback((name) => {
+  //   return formState.errors[name]
+  // }, [])
+
+  // const errors = useMemo(() => {
+  //   return formState.errors
+  // }, [formState.errors])
+
+  const onSubmit = useMemo(() => {
+    return async (data) => {
+      // console.log(data)
+      await onLogin(data, '/app')
+    }
   }, [])
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    console.log(form)
-    const login = await fetch(
-      `${import.meta.env.VITE_STRAPI_URL}/api/auth/local`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(form),
-      }
-    )
-    const loginResponseData = await login.json()
-    console.log(loginResponseData)
-    if (form.remember_me) {
-      Cookies.set('token', loginResponseData.jwt, { expires: 30 })
-      Cookies.set('user', JSON.stringify(loginResponseData.user), {
-        expires: 30,
-      })
-    }
-    sessionStorage.setItem('token', loginResponseData.jwt)
-    sessionStorage.setItem('user', JSON.stringify(loginResponseData.user))
-    navigate('/app')
-  }
+  console.log('init sign in')
 
   return (
     <div className="t-signIn">
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1>Sign In</h1>
-          <form action="" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <InputField
-              label="Email"
-              type="email"
+              label="Email ou Username"
+              type="text"
               name="identifier"
               placeholder="test@test.com"
-              value={form.name}
-              required={true}
-              onChange={handleChange}
+              register={register}
+              errors={errors.identifier}
+              // control={control}
             />
             <InputField
               label="Mot de passe"
               type="password"
               name="password"
               placeholder="******"
-              value={form.name}
-              required={true}
-              onChange={handleChange}
+              register={register}
+              errors={errors.password}
+              // control={control}
+            />
+            <InputField
+              type="checkbox"
+              name="remember"
+              register={register}
+              control={control}
+              options={[
+                {
+                  value: true,
+                  content: 'Se souvenir de moi',
+                  name: 'remember',
+                },
+              ]}
             />
             <Button className=" -primary" type="submit">
               Se connecter

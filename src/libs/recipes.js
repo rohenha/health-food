@@ -1,14 +1,14 @@
-export async function findRecipes(page = 1, params) {
+export async function findRecipes(page = 1, params, token) {
   const response = await fetch(
-    `${import.meta.env.VITE_STRAPI_URL}/api/recettes?pagination[page]=${page}${
-      params ? `&${params}` : ''
-    }`,
+    `${
+      import.meta.env.VITE_STRAPI_URL
+    }/api/recettes?pagination[page]=${page}${params}`,
     {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_STRAPI_TOKEN}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   )
@@ -90,12 +90,12 @@ export async function updateRecipe(id, data) {
   return recipeData
 }
 
-export async function searchRecipes(search, page) {
+export async function searchRecipes(search, page, token) {
   let attributes =
-    'pagination[pageSize]=10&pagination[withCount]=true&sort=title:asc'
+    '&pagination[pageSize]=10&pagination[withCount]=true&sort=title:asc'
   if (search.name !== '') {
     attributes += `&filters[title][$contains]=${search.name}`
   }
-  const recipesData = await findRecipes(page, attributes)
+  const recipesData = await findRecipes(page, attributes, token)
   return recipesData
 }

@@ -1,41 +1,53 @@
-import { useCallback } from 'react'
+import { useMemo } from 'react'
 
 import Button from '@components/atoms/Button'
 import InputField from '@components/atoms/InputField'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 import { createRecipe } from '@libs/recipes'
-import InputReducer from '@hooks/InputReducer'
 import useToasts from '@hooks/Toasts'
 
 import './New.scss'
 
+const schema = yup
+  .object({
+    name: yup.string().required('Un nom doit être choisit'),
+    type: yup.string().required('Vous devez sélectionner un type'),
+    ingredients: yup
+      .array()
+      .min(1)
+      .of(yup.string().required('Vous devez sélectionner un type')),
+  })
+  .required()
+
 export default function New() {
   const { pushToast } = useToasts()
-  const [form, formDispatch] = InputReducer({
-    name: '',
-    type: '',
+  const { register, handleSubmit, formState, reset } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
   })
+  const errors = useMemo(() => {
+    return formState.errors
+  }, [formState.errors])
 
-  const handleChange = useCallback((event) => {
-    formDispatch({ target: event.target, type: 'update' })
-  }, [])
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const data = await createRecipe({
-      title: form.name,
-      nature: form.type,
+  const onSubmit = async (data) => {
+    console.log(data)
+    const recipeData = await createRecipe({
+      title: data.name,
+      nature: data.type,
       preparation_duration: 0,
     })
 
-    if (data.data.id) {
-      console.log(data)
-      formDispatch({ type: 'reset' })
+    if (recipeData.data.id) {
+      console.log(recipeData)
       pushToast({
         title: '',
         content: 'La recette a bien été créée',
         state: 'success',
       })
+      reset()
     } else {
       pushToast({
         title: '',
@@ -50,23 +62,21 @@ export default function New() {
       <div className="row">
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1 className="-tupp -tbold">Nouvelle recette</h1>
-          <form action="" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <InputField
               label="Nom de la recette"
               type="text"
               name="name"
+              register={register}
+              errors={errors.name}
               placeholder="Gratin de pâtes"
-              value={form.name}
-              required={true}
-              onChange={handleChange}
             />
             <InputField
               label="Type de recette"
               type="select"
               name="type"
-              value={form.type}
-              onChange={handleChange}
-              required={true}
+              register={register}
+              errors={errors.type}
               options={[
                 { value: 'breakfast', content: 'Petit déjeuner' },
                 { value: 'starter', content: 'Entrée' },
@@ -74,24 +84,24 @@ export default function New() {
                 { value: 'aperitif', content: 'Apéritif' },
               ]}
             />
-            {/* <InputField
+            <InputField
               label="Ingrédients"
               type="checkbox"
               name="ingredients"
-              value={form.ingredients}
-              onChange={handleChange}
+              register={register}
+              errors={errors.ingredients}
               options={[
                 { value: 'poireaux', content: 'Poireaux', name: 'poireaux' },
                 { value: 'bread', content: 'Pain', name: 'bread' },
                 { value: 'emmental', content: 'Emmental', name: 'emmental' },
               ]}
-            /> */}
+            />
             {/* <InputField
               label="Type de cuisine"
               type="radio"
               name="cooking"
-              value={form.cooking}
-              onChange={handleChange}
+              register={register}
+              errors={errors.cooking}
               options={[
                 { value: 'four', content: 'Four', name: 'four' },
                 { value: 'plaques', content: 'Plaques', name: 'plaques' },

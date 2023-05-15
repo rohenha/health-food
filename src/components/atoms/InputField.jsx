@@ -1,4 +1,5 @@
 import { useMemo, memo } from 'react'
+import { useFormState } from 'react-hook-form'
 
 import './InputField.scss'
 
@@ -10,7 +11,10 @@ const InputField = ({
   placeholder,
   id,
   options,
-  value,
+  register,
+  params = {},
+  errors,
+  // control,
   ...props
 }) => {
   const inputClass = useMemo(
@@ -18,26 +22,31 @@ const InputField = ({
     [className]
   )
 
+  // const { errors } = useFormState({
+  //   control,
+  //   name: name,
+  //   exact: true,
+  // })
+
+  console.log('render input ' + name)
+
   const input = useMemo(() => {
     const renderInputDefault = () => {
       return (
         <input
           type={type}
-          name={name}
           placeholder={placeholder}
           id={id}
-          value={value}
           {...props}
+          {...register(name, params)}
         />
       )
     }
 
     const renderInputSelect = () => {
       return (
-        <select name={name} id={name} value={value} {...props}>
-          <option value="" disabled>
-            {placeholder}
-          </option>
+        <select id={name} {...props} {...register(name, params)}>
+          <option value="">{placeholder}</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.content}
@@ -48,7 +57,6 @@ const InputField = ({
     }
 
     const renderInputCheckbox = () => {
-      console.log('render checkbox')
       return (
         <div>
           {options.map((option) => (
@@ -57,9 +65,9 @@ const InputField = ({
               <input
                 value={option.value}
                 type={type}
-                name={name}
                 id={option.name}
                 {...props}
+                {...register(name, params)}
               />
             </div>
           ))}
@@ -76,10 +84,9 @@ const InputField = ({
               <input
                 value={option.value}
                 type={type}
-                name={name}
                 id={option.name}
-                checked={value === option.value}
                 {...props}
+                {...register(name, params)}
               />
             </div>
           ))}
@@ -97,21 +104,25 @@ const InputField = ({
       default:
         return renderInputDefault()
     }
-  }, [type, name, placeholder, id, props, options, value])
+  }, [type, name, placeholder, id, props, options, register, params])
 
   return (
     <div className={inputClass}>
-      {type === 'checkbox' || type === 'radio' ? (
-        <legend className="a-labelText">{label}</legend>
-      ) : (
-        <label htmlFor={id} className="a-labelText">
-          {label}
-        </label>
-      )}
+      {label &&
+        (type === 'checkbox' || type === 'radio' ? (
+          <legend className="a-labelText">{label}</legend>
+        ) : (
+          <label htmlFor={id} className="a-labelText">
+            {label}
+          </label>
+        ))}
       {input}
+      {errors && <span>{errors.message}</span>}
     </div>
   )
 }
 
-const InputFieldMemo = memo(InputField)
+const InputFieldMemo = memo(InputField, (prevProps, nextProps) => {
+  return prevProps.errors === nextProps.errors
+})
 export default InputFieldMemo

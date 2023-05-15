@@ -1,46 +1,29 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useMemo, useContext } from 'react'
 
 import RecipesList from '@components/molecules/RecipesList'
 import RecipesSearch from '@components/molecules/RecipesSearch'
 import Pagination from '@components/organisms/Pagination'
 
-import { searchRecipes } from '@libs/recipes'
+import useRecipes from '@hooks/Recipes'
+import { AuthContext } from '@contexts/AuthContext'
 import { debounce } from '@libs/utils'
 
 import './Recipes.scss'
 
 export default function Recipes() {
-  const [page, setPage] = useState()
-  const [search, setSearch] = useState({
-    name: '',
-  })
-  const [recipes, setRecipes] = useState({
-    data: [],
-    pagination: { page: 1, pageCount: 1, pageSize: 10, total: 1 },
-  })
-
-  const updatePage = useCallback((index) => {
-    setPage(index)
-  }, [])
+  const { user } = useContext(AuthContext)
+  const [recipes, pagination, updateSearch, updatePage, updateRecipes] =
+    useRecipes(user.token)
+  console.log('render recipes')
 
   const debouncedChangeHandler = useMemo(() => {
-    return debounce((args) => {
-      setSearch(args)
-      setPage(1)
-    }, 300)
-  }, [])
+    return debounce(updateSearch, 300)
+  }, [updateSearch])
 
   useEffect(() => {
-    const getRecipes = async () => {
-      const recipesData = await searchRecipes(search, page)
-      setRecipes({
-        data: recipesData.data,
-        pagination: recipesData.meta.pagination,
-      })
-    }
-
-    getRecipes()
-  }, [page, search])
+    updateRecipes()
+    console.log('get recipes')
+  }, [updateRecipes])
 
   return (
     <div className="t-recipes">
@@ -48,13 +31,9 @@ export default function Recipes() {
         <div className="column-16 offset-4 md-column-12 md-offset-6">
           <h1 className="-tupp -tbold">Recettes</h1>
           <RecipesSearch onChange={debouncedChangeHandler} />
-          <p>Nombre de résultats : {recipes.pagination.total}</p>
-          <RecipesList recipes={recipes.data} />
-          <Pagination
-            page={recipes.pagination.page}
-            count={recipes.pagination.pageCount}
-            onPageChange={updatePage}
-          />
+          <p>Nombre de résultats : {pagination.total}</p>
+          <RecipesList recipes={recipes} />
+          <Pagination {...pagination} onPageChange={updatePage} />
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useMemo, memo } from 'react'
 
 import './Button.scss'
 
-export default function Button({ children, url, className, ...props }) {
+const Button = ({ children, url, className, ...props }) => {
   const btnClass = useMemo(
     () =>
       className ? `a-button a-buttonText${className}` : `a-button a-buttonText`,
@@ -23,3 +23,6 @@ export default function Button({ children, url, className, ...props }) {
     )
   }
 }
+
+const ButtonMemo = memo(Button)
+export default ButtonMemo
