@@ -10,11 +10,11 @@ import './styles/site.scss'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <AuthContextProvider>
-  <AuthContextProvider>
-    <ToastContextProvider>
+  <ToastContextProvider>
+    <AuthContextProvider>
       <RouterProvider router={router} />
-    </ToastContextProvider>
-  </AuthContextProvider>
+    </AuthContextProvider>
+  </ToastContextProvider>
   // <React.StrictMode>
   // </React.StrictMode>
 )

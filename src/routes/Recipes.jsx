@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useContext } from 'react'
+import { useLayoutEffect, useMemo, useContext } from 'react'
 
 import RecipesList from '@components/molecules/RecipesList'
 import RecipesSearch from '@components/molecules/RecipesSearch'
@@ -20,7 +20,7 @@ export default function Recipes() {
     return debounce(updateSearch, 300)
   }, [updateSearch])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     updateRecipes()
     console.log('get recipes')
   }, [updateRecipes])

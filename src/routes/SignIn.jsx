@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -20,28 +20,17 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onTouched',
   })
 
-  // const { errors } = formState
-  // const getErrors = useCallback((name) => {
-  //   return formState.errors[name]
-  // }, [])
-
-  // const errors = useMemo(() => {
-  //   return formState.errors
-  // }, [formState.errors])
-
   const onSubmit = useMemo(() => {
     return async (data) => {
-      // console.log(data)
       await onLogin(data, '/app')
     }
-  }, [])
+  }, [onLogin])
 
   console.log('init sign in')
 
@@ -58,7 +47,6 @@ export default function SignIn() {
               placeholder="test@test.com"
               register={register}
               errors={errors.identifier}
-              // control={control}
             />
             <InputField
               label="Mot de passe"
@@ -67,13 +55,11 @@ export default function SignIn() {
               placeholder="******"
               register={register}
               errors={errors.password}
-              // control={control}
             />
             <InputField
               type="checkbox"
               name="remember"
               register={register}
-              control={control}
               options={[
                 {
                   value: true,

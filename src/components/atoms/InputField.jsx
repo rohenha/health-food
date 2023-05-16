@@ -1,5 +1,4 @@
 import { useMemo, memo } from 'react'
-import { useFormState } from 'react-hook-form'
 
 import './InputField.scss'
 
@@ -14,19 +13,12 @@ const InputField = ({
   register,
   params = {},
   errors,
-  // control,
   ...props
 }) => {
   const inputClass = useMemo(
     () => (className ? `a-inputField${className}` : 'a-inputField'),
     [className]
   )
-
-  // const { errors } = useFormState({
-  //   control,
-  //   name: name,
-  //   exact: true,
-  // })
 
   console.log('render input ' + name)
 

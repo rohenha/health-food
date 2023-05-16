@@ -30,15 +30,15 @@ export default function useAuth() {
           })
           navigate('/app')
         } else {
-          // pushToast({
-          //   title: '',
-          //   content: data.error.message,
-          //   state: 'error',
-          //   duration: 5,
-          // })
+          pushToast({
+            title: '',
+            content: data.error.message,
+            state: 'error',
+            duration: 5,
+          })
         }
       },
-      [pushToast]
+      [pushToast, onLogin, navigate]
     ),
     onLogout: useCallback(
       async (url = '/sign-in') => {
