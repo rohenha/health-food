@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom'
+import { memo } from 'react'
 
 import './Navbar.scss'
 
-export default function Navbar({ nav }) {
+const Navbar = ({ nav }) => {
   return (
     <nav className="o-navBar">
       <ul>
@@ -12,11 +13,12 @@ export default function Navbar({ nav }) {
               to={item.url}
               aria-label={item.title}
               className={({ isActive }) =>
-                isActive ? 'a-iconText -active' : 'a-iconText'
+                isActive ? 'o-navBar__link -active' : 'o-navBar__link'
               }
               end
             >
-              {item.content}
+              {item.icon}
+              <span>{item.content}</span>
             </NavLink>
           </li>
         ))}
@@ -24,3 +26,5 @@ export default function Navbar({ nav }) {
     </nav>
   )
 }
+
+export default memo(Navbar)

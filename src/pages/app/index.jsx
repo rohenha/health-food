@@ -9,6 +9,7 @@ export default function Dashboard() {
   const handleLogout = () => {
     onLogout()
   }
+
   return (
     <>
       <h1>Dashboard</h1>

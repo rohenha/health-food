@@ -1,7 +1,17 @@
 import { defineConfig } from 'vite'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
-import getPlugins from './plugins'
+import getPlugins from './vite.plugins'
+import { dependencies } from './package.json'
+
+function renderChunks(deps) {
+  let chunks = {};
+  Object.keys(deps).forEach((key) => {
+    if (['react', 'react-router-dom', 'react-dom'].includes(key)) return;
+    chunks[key] = [key];
+  });
+  return chunks;
+}
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -21,9 +31,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@styles/': `${folder}/styles/`,
-      '@scripts/': `${folder}/scripts/`,
       '@components/': `${folder}/components/`,
-      '@routes/': `${folder}/routes/`,
+      '@store/': `${folder}/store/`,
+      '@pages/': `${folder}/pages/`,
       '@libs/': `${folder}/libs/`,
       '@hooks/': `${folder}/hooks/`,
       '@contexts/': `${folder}/contexts/`,
@@ -37,9 +47,20 @@ export default defineConfig({
       },
     },
   },
+  json: {
+    stringify: true,
+  },
   build: {
     sourcemap: config.env.isProd ? false : 'inline',
     minify: config.env.isProd ? 'esbuild' : false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-router-dom', 'react-dom'],
+          // ...renderChunks(dependencies),
+        },
+      },
+    },
   },
   plugins: getPlugins(config.env),
   test: {

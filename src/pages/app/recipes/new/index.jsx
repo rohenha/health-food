@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { createRecipe } from '@libs/recipes'
-import useToasts from '@hooks/Toasts'
 
 import './New.scss'
 
@@ -23,7 +22,6 @@ const schema = yup
   .required()
 
 export default function New() {
-  const { pushToast } = useToasts()
   const { register, handleSubmit, formState, reset } = useForm({
     resolver: yupResolver(schema),
     mode: 'onTouched',
@@ -42,18 +40,10 @@ export default function New() {
 
     if (recipeData.data.id) {
       console.log(recipeData)
-      pushToast({
-        title: '',
-        content: 'La recette a bien été créée',
-        state: 'success',
-      })
+      // recipe created
       reset()
     } else {
-      pushToast({
-        title: '',
-        content: "Un problème s'est produit, veuillez réessayer",
-        state: 'error',
-      })
+      // error
     }
   }
 

@@ -8,7 +8,6 @@ import InputField from '@components/atoms/InputField'
 import Button from '@components/atoms/Button'
 
 import { findOneRecipe, removeRecipe, updateRecipe } from '@libs/recipes'
-import useToasts from '@hooks/Toasts'
 
 const schema = yup
   .object({
@@ -20,7 +19,6 @@ const schema = yup
 export default function EditRecipe() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { pushToast } = useToasts()
   const { register, handleSubmit, formState, setValue } = useForm({
     resolver: yupResolver(schema),
     mode: 'onTouched',
@@ -39,11 +37,7 @@ export default function EditRecipe() {
 
   const onRemoveRecipe = useCallback(async () => {
     await removeRecipe(id)
-    pushToast({
-      title: '',
-      content: 'La recette a bien été supprimée',
-      state: 'success',
-    })
+    // recipe removed
     return navigate('/app/recipes')
   }, [])
 
@@ -61,17 +55,9 @@ export default function EditRecipe() {
 
     if (recipeData.data.id) {
       setRecipe(recipeData.data)
-      pushToast({
-        title: '',
-        content: 'La recette a bien été mise à jour',
-        state: 'success',
-      })
+      // recipe update
     } else {
-      pushToast({
-        title: '',
-        content: "Un problème s'est produit, veuillez réessayer",
-        state: 'error',
-      })
+      // error
     }
   }
 

@@ -1,20 +1,26 @@
-// import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+import { createRoot } from 'react-dom/client'
+import { ConfigProvider } from 'antd'
+import { App } from 'antd'
 
-import router from '@libs/routes'
-import { ToastContextProvider } from '@contexts/ToastContext'
-import { AuthContextProvider } from '@contexts/AuthContext'
+import { Routes } from '@generouted/react-router'
 
-import './styles/site.scss'
+import './styles/global.scss'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  // <AuthContextProvider>
-  <ToastContextProvider>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
-  </ToastContextProvider>
-  // <React.StrictMode>
-  // </React.StrictMode>
+createRoot(document.getElementById('root')).render(
+  // <ConfigProvider
+  //   theme={{
+  //     token: {
+  //       // Seed Token
+  //       // colorPrimary: '#092635',
+  //       // borderRadius: 2,
+  //       // Alias Token
+  //       // colorBgContainer: '#9EC8B9',
+  //     },
+  //   }}
+  // >
+    <App>
+        <Routes />
+    </App>
+  // </ConfigProvider>
+  // </ToastContextProvider>
 )

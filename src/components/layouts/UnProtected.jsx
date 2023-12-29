@@ -1,12 +1,11 @@
 import { useContext } from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 
-import { AuthContext } from '@contexts/AuthContext'
+import { isLoggedIn } from '@store/auth'
 
 export default function Default() {
-  const { user } = useContext(AuthContext)
 
-  if (user) {
+  if (isLoggedIn.value) {
     return <Navigate to="/app" replace />
   }
 

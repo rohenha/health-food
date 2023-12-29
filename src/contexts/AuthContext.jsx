@@ -3,8 +3,9 @@ import Cookies from 'js-cookie'
 
 export const AuthContext = createContext('')
 
+// Context to manage auth token
 export function AuthContextProvider({ children }) {
-  console.log('render Auth Context')
+  // Method to check if auth token is stored in cookie or session storage
   const getAuth = () => {
     const userCookie = Cookies.get('user')
     const userSession = sessionStorage.getItem('user')
@@ -18,18 +19,16 @@ export function AuthContextProvider({ children }) {
   const data = getAuth()
   const [user, setUser] = useState(data)
 
-  // const updateAuth = () => {
-  //   const newUser = getAuth()
-  //   setUser(newUser)
-  // }
-
+  // Save methods with memo to update provider only when user changes
   const value = useMemo(() => {
     const handleLogin = async (data) => {
       await setUser(data)
+      return data
     }
 
     const handleLogout = async () => {
       await setUser(null)
+      return null
     }
 
     return {

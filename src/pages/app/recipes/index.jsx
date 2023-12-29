@@ -1,4 +1,5 @@
 import { useLayoutEffect, useMemo, useContext } from 'react'
+import { useLoaderData } from 'react-router-dom'
 
 import RecipesList from '@components/molecules/RecipesList'
 import RecipesSearch from '@components/molecules/RecipesSearch'
@@ -8,9 +9,15 @@ import useRecipes from '@hooks/Recipes'
 import { AuthContext } from '@contexts/AuthContext'
 import { debounce } from '@libs/utils'
 
-import './Recipes.scss'
+export const Loader = () => {
+  return {
+    test: 'hello world',
+  }
+}
 
 export default function Recipes() {
+  const data = useLoaderData()
+  console.log(data)
   const { user } = useContext(AuthContext)
   const [recipes, pagination, updateSearch, updatePage, updateRecipes] =
     useRecipes(user.token)
@@ -27,15 +34,11 @@ export default function Recipes() {
 
   return (
     <div className="t-recipes">
-      <div className="row">
-        <div className="column-16 offset-4 md-column-12 md-offset-6">
-          <h1 className="-tupp -tbold">Recettes</h1>
-          <RecipesSearch onChange={debouncedChangeHandler} />
-          <p>Nombre de résultats : {pagination.total}</p>
-          <RecipesList recipes={recipes} />
-          <Pagination {...pagination} onPageChange={updatePage} />
-        </div>
-      </div>
+      <h1 className="-tupp -tbold">Recettes</h1>
+      <RecipesSearch onChange={debouncedChangeHandler} />
+      <p>Nombre de résultats : {pagination.total}</p>
+      <RecipesList recipes={recipes} />
+      <Pagination {...pagination} onPageChange={updatePage} />
     </div>
   )
 }

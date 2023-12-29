@@ -7,7 +7,6 @@ import * as yup from 'yup'
 import Button from '@components/atoms/Button'
 import InputField from '@components/atoms/InputField'
 
-import useToasts from '@hooks/Toasts'
 import { signUp } from '@libs/strapi'
 
 const schema = yup
